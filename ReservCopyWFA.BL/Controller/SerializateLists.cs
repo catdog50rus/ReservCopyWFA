@@ -36,10 +36,10 @@ namespace ReservCopyWFA.BL.Controller
             }
         }
 
-        public string LoadTargetPath()
+        public string LoadTargetPath(string fileName)
         {
             var formatter = new XmlSerializer(typeof(string));
-            var fileName = "targetlist.xml";
+            //var fileName = "targetlist.xml";
 
             if (File.Exists(fileName))
             {

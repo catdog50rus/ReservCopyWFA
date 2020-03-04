@@ -47,7 +47,9 @@
     <Compile Include="Controller\SaveDataController.cs" />
     <Compile Include="Controller\SerializateLists.cs" />
     <Compile Include="Controller\TargetPathController.cs" />
-    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\CopyModel.cs" />
+    <Compile Include="Models\SourceModel.cs" />
+    <Compile Include="Models\TargetModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controller\SourcePathController.cs" />
   </ItemGroup>

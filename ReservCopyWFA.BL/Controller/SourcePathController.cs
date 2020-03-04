@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReservCopyWFA.BL.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,16 +11,22 @@ namespace ReservCopyWFA.BL
     public class SourcePathController
     {
 
-        public List<string> FullFilesNames { get; set;} 
-        public List<string> DirectoriesNeedCopy { get; set; } 
-        public List<string> FilesNames { get; set; } 
+        private readonly SourceModel model;
         
 
         public SourcePathController()
         {
-            FullFilesNames = new List<string>();
-            FilesNames = new List<string>();
-            DirectoriesNeedCopy = new List<string>();
+            model = new SourceModel();
+
+        }
+        public SourcePathController(List<string> fullFilesNames, List<string> directoriesNeedCopy, List<string> filesNames)
+        {
+            model = new SourceModel
+            {
+                DirectoriesNeedCopy = directoriesNeedCopy,
+                FilesNames = filesNames,
+                FullFilesNames = fullFilesNames
+            };
         }
 
         public void AddSourceFile(List<string> files)
@@ -30,9 +37,9 @@ namespace ReservCopyWFA.BL
 
             foreach (var file in files)
             {
-                FullFilesNames.Add(file);
-                FilesNames.Add(Path.GetFileName(file));
-                DirectoriesNeedCopy.Add(selectedDir);
+                model.FullFilesNames.Add(file);
+                model.FilesNames.Add(Path.GetFileName(file));
+                model.DirectoriesNeedCopy.Add(selectedDir);
             }
 
         }
@@ -44,51 +51,56 @@ namespace ReservCopyWFA.BL
 
             DirectoryInfo info = new DirectoryInfo(selectPath);
             var selectedDir = info.Name;
-            
 
             subDirs.AddRange(Directory.GetDirectories(selectPath, "*", SearchOption.AllDirectories).ToList());
-            //if(subDirs.Count == 0)
-            //{
-            //    subDirs.Add(selectPath);
-            //}
 
             foreach (var dir in subDirs)
             {
 
-                foreach(var file in Directory.EnumerateFiles(dir))
+                foreach (var file in Directory.EnumerateFiles(dir))
                 {
-                    FullFilesNames.Add(file);
-                    FilesNames.Add(Path.GetFileName(file));
-                    DirectoriesNeedCopy.Add(dir.Substring(selectPath.Length - selectedDir.Length));
+                    model.FullFilesNames.Add(file);
+                    model.FilesNames.Add(Path.GetFileName(file));
+                    model.DirectoriesNeedCopy.Add(dir.Substring(selectPath.Length - selectedDir.Length));
                 }
 
             }
-
+            
 
         }
 
         public void ClearSourceFile()
         {
-            FullFilesNames.Clear();
-            FilesNames.Clear();
-            DirectoriesNeedCopy.Clear();
+            model.FullFilesNames.Clear();
+            model.FilesNames.Clear();
+            model.DirectoriesNeedCopy.Clear();
         }
 
         public void RemoveSourceFile(List<string> removeFiles)
         {
             while(removeFiles.Count > 0)
             {
-                for (var i = 0; i < FullFilesNames.Count; i++)
+                for (var i = 0; i < model.FullFilesNames.Count; i++)
                 {
-                    if (FullFilesNames[i] == removeFiles.FirstOrDefault())
+                    if (model.FullFilesNames[i] == removeFiles.FirstOrDefault())
                     {
-                        FullFilesNames.RemoveAt(i);
-                        FilesNames.RemoveAt(i);
-                        DirectoriesNeedCopy.RemoveAt(i);
+                        model.FullFilesNames.RemoveAt(i);
+                        model.FilesNames.RemoveAt(i);
+                        model.DirectoriesNeedCopy.RemoveAt(i);
                         removeFiles.RemoveAt(0);
                     }
                 }
             }
+        }
+
+        public List<string> GetFileNamesList()
+        {
+            return model.FullFilesNames;
+        }
+
+        public SourceModel GetSourceModel()
+        {
+            return model;
         }
 
     }
