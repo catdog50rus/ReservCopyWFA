@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace ReservCopyWFA.BL.Controller
 {
@@ -39,7 +35,6 @@ namespace ReservCopyWFA.BL.Controller
         public string LoadTargetPath(string fileName)
         {
             var formatter = new XmlSerializer(typeof(string));
-            //var fileName = "targetlist.xml";
 
             if (File.Exists(fileName))
             {
